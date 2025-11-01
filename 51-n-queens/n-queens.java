@@ -1,5 +1,5 @@
 class Solution {
-    public boolean isSafe(int row, int col, List<String> board, int n){
+public boolean isSafe(int row, int col, List<String> board, int n){
         int duprow = row;
         int dupcol = col;
         while(row >= 0 && col >= 0){
@@ -61,18 +61,6 @@ class Solution {
         return ans;
     }
 
-    // To test the code
-    public static void main(String[] args) {
-        Solution sol = new Solution();
-        List<List<String>> res = sol.solveNQueens(4);
-
-        for (List<String> board : res) {
-            for (String row : board) {
-                System.out.println(row);
-            }
-            System.out.println();
-        }
     }
-}
         
     
