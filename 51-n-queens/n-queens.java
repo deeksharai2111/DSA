@@ -1,66 +1,53 @@
+import java.util.*;
+
 class Solution {
-public boolean isSafe(int row, int col, List<String> board, int n){
-        int duprow = row;
-        int dupcol = col;
-        while(row >= 0 && col >= 0){
-    if(board.get(row).charAt(col) == 'Q') 
-    return false;
-    row--;
-    col--;
-        }
-        col = dupcol;
-        row = duprow;
-        while(col>=0){
-            if(board.get(row).charAt(col) == 'Q') 
-            return false;
-            col--;
-        }
-        col = dupcol;
-        row = duprow;
-        while(row < n && col >= 0){
-            if(board.get(row).charAt(col) == 'Q') 
-            return false;
-            row++;
-            col--;
-        }
-        return true;
-    }
-    public void solve(int col, List<String> board, List<List<String>> ans, int n) {
+    public void solve(int col, List<String> board, List<List<String>> ans, 
+                      int n, boolean[] leftRow, boolean[] upperDiagonal, boolean[] lowerDiagonal) {
         if (col == n) {
             ans.add(new ArrayList<>(board));
             return;
         }
 
         for (int row = 0; row < n; row++) {
-            if (isSafe(row, col, board, n)) {
+            // Check if position is safe using hashing
+            if (!leftRow[row] && !lowerDiagonal[row + col] && !upperDiagonal[n - 1 + col - row]) {
                 // Place queen
                 char[] arr = board.get(row).toCharArray();
                 arr[col] = 'Q';
                 board.set(row, new String(arr));
 
-                // Recurse for next column
-                solve(col + 1, board, ans, n);
+                // Mark as occupied
+                leftRow[row] = true;
+                lowerDiagonal[row + col] = true;
+                upperDiagonal[n - 1 + col - row] = true;
 
-                // Backtrack
+                // Recursive call
+                solve(col + 1, board, ans, n, leftRow, upperDiagonal, lowerDiagonal);
+
+                // Backtrack: remove queen
                 arr[col] = '.';
                 board.set(row, new String(arr));
+                leftRow[row] = false;
+                lowerDiagonal[row + col] = false;
+                upperDiagonal[n - 1 + col - row] = false;
             }
         }
     }
+
     public List<List<String>> solveNQueens(int n) {
         List<List<String>> ans = new ArrayList<>();
         List<String> board = new ArrayList<>();
+        char[] row = new char[n];
+        Arrays.fill(row, '.');
 
-        // Initialize board with all '.'
-        String row = ".".repeat(n);
-        for (int i = 0; i < n; i++) {
-            board.add(row);
-        }
+        for (int i = 0; i < n; i++) board.add(new String(row));
 
-        solve(0, board, ans, n);
+        // Create hash arrays
+        boolean[] leftRow = new boolean[n];
+        boolean[] lowerDiagonal = new boolean[2 * n - 1];
+        boolean[] upperDiagonal = new boolean[2 * n - 1];
+
+        solve(0, board, ans, n, leftRow, upperDiagonal, lowerDiagonal);
         return ans;
     }
-
-    }
-        
-    
+}
