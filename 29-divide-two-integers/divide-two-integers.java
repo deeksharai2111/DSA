@@ -1,7 +1,7 @@
-class Solution {
-    public int divide(int dividend, int divisor) {
+class Solution{
+    public int divide(int dividend, int divisor){
       if(dividend == divisor)
-      return 1;
+      return 1;               
       boolean sign = true;
       if((dividend >= 0 && divisor < 0) || (dividend <=0 && divisor>0))
       sign = false;
