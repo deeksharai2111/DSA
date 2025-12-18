@@ -1,16 +1,25 @@
 class Solution {
     public List<List<Integer>> subsets(int[] nums) {
-        List<List<Integer>> res = new ArrayList<>();
-        generateSubsets(0, nums, new ArrayList<>(), res);
-        return res;
-    }
+        List<List<Integer>> ans = new ArrayList<>();
+        int n = nums.length;
 
-    void generateSubsets(int index, int[] nums, List<Integer> curr, List<List<Integer>> res) {
-        res.add(new ArrayList<>(curr));
-        for (int i = index; i < nums.length; i++) {
-            curr.add(nums[i]);
-            generateSubsets(i + 1, nums, curr, res);
-            curr.remove(curr.size() - 1);
+        // total subsets = 2^n
+        int subsets = 1 << n;
+
+        for (int num = 0; num < subsets; num++) {
+            List<Integer> list = new ArrayList<>();
+
+            for (int i = 0; i < n; i++) {
+                // check if ith bit is set
+                if ((num & (1 << i)) != 0) {
+                    list.add(nums[i]);
+                }
+            }
+
+            ans.add(list);
         }
+
+        return ans;
+        
     }
 }
