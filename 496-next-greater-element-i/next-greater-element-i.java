@@ -3,34 +3,36 @@ import java.util.*;
 class Solution {
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
         
-        int n1 = nums1.length;
-        int n2 = nums2.length;
+        // Step 1: Map to store next greater of each element in nums2
+        HashMap<Integer, Integer> map = new HashMap<>();
         
-        int[] ans = new int[n1];
+        // Step 2: Stack for monotonic decreasing stack
+        Stack<Integer> st = new Stack<>();
         
-        for (int i = 0; i < n1; i++) {
+        // Step 3: Traverse nums2 from right to left
+        for (int i = nums2.length - 1; i >= 0; i--) {
             
-            int current = nums1[i];
-            int nextGreater = -1;
-            
-            // Step 1: Find index of nums1[i] in nums2
-            int index = -1;
-            for (int j = 0; j < n2; j++) {
-                if (nums2[j] == current) {
-                    index = j;
-                    break;
-                }
+            // Pop smaller elements
+            while (!st.isEmpty() && st.peek() <= nums2[i]) {
+                st.pop();
             }
             
-            // Step 2: Search for next greater element
-            for (int j = index + 1; j < n2; j++) {
-                if (nums2[j] > current) {
-                    nextGreater = nums2[j];
-                    break;
-                }
+            // If stack empty → no greater element
+            if (st.isEmpty()) {
+                map.put(nums2[i], -1);
+            } else {
+                map.put(nums2[i], st.peek());
             }
             
-            ans[i] = nextGreater;
+            // Push current element
+            st.push(nums2[i]);
+        }
+        
+        // Step 4: Build result for nums1
+        int[] ans = new int[nums1.length];
+        
+        for (int i = 0; i < nums1.length; i++) {
+            ans[i] = map.get(nums1[i]);
         }
         
         return ans;
