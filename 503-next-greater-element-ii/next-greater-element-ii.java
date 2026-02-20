@@ -5,29 +5,23 @@ class Solution {
         
         int n = nums.length;
         int[] nge = new int[n];
-        Stack<Integer> st = new Stack<>();
-        
-        // Traverse from 2n-1 to 0
+        Arrays.fill(nge, -1);
+
+        Deque<Integer> st = new ArrayDeque<>();
+
         for (int i = 2 * n - 1; i >= 0; i--) {
-            
-            // Maintain decreasing stack
+
             while (!st.isEmpty() && st.peek() <= nums[i % n]) {
                 st.pop();
             }
-            
-            // Fill answer only for first n elements
-            if (i < n) {
-                if (st.isEmpty()) {
-                    nge[i] = -1;
-                } else {
-                    nge[i] = st.peek();
-                }
+
+            if (i < n && !st.isEmpty()) {
+                nge[i] = st.peek();
             }
-            
-            // Push current element
+
             st.push(nums[i % n]);
         }
-        
+
         return nge;
     }
 }
