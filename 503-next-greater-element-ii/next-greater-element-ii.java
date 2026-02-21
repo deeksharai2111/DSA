@@ -14,7 +14,6 @@ class Solution {
             }
     st.push(nums[i % n]);
         }
-
-        return nge;
+    return nge;
     }
 }
