@@ -2,43 +2,54 @@ import java.util.*;
 
 class Solution {
     public int sumSubarrayMins(int[] arr) {
-
         int n = arr.length;
-        int mod = 1000000007;
+        long mod = 1000000007;
 
-        int[] pse = new int[n];
-        int[] nse = new int[n];
+        int[] prevLess = new int[n];
+        int[] nextLess = new int[n];
 
-        Stack<Integer> st = new Stack<>();
+        Stack<Integer> stack = new Stack<>();
 
-        // find PSE
+        // Previous Less Element
         for (int i = 0; i < n; i++) {
-            while (!st.isEmpty() && arr[st.peek()] > arr[i]) {
-                st.pop();
+            while (!stack.isEmpty() && arr[stack.peek()] > arr[i]) {
+                stack.pop();
             }
-            pse[i] = st.isEmpty() ? -1 : st.peek();
-            st.push(i);
+            prevLess[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.push(i);
         }
 
-        st.clear();
+        stack.clear();
 
-        // find NSE
+        // Next Less Element
         for (int i = n - 1; i >= 0; i--) {
-            while (!st.isEmpty() && arr[st.peek()] >= arr[i]) {
-                st.pop();
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
             }
-            nse[i] = st.isEmpty() ? n : st.peek();
-            st.push(i);
+            nextLess[i] = stack.isEmpty() ? n : stack.peek();
+            stack.push(i);
         }
 
-        long total = 0;
+        // Calculate answer
+        long sum = 0;
 
         for (int i = 0; i < n; i++) {
-            long left = i - pse[i];
-            long right = nse[i] - i;
-            total = (total + (left * right % mod) * arr[i] % mod) % mod;
+            long left = i - prevLess[i];
+            long right = nextLess[i] - i;
+            long contribution = (left * right) % mod * arr[i] % mod;
+            sum = (sum + contribution) % mod;
         }
 
-        return (int) total;
+        return (int) sum;
+    }
+
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+
+        int[] arr1 = {3, 1, 2, 4};
+        System.out.println(sol.sumSubarrayMins(arr1)); // Output: 17
+
+        int[] arr2 = {11, 81, 94, 43, 3};
+        System.out.println(sol.sumSubarrayMins(arr2)); // Output: 444
     }
 }
