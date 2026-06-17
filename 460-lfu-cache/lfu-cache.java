@@ -39,7 +39,7 @@ else{
     minfrequency = 1;
 DLLNode newnode = new DLLNode(key,value);
 DoubleLinkedList curList = frequencyMap.getOrDefault(1,new DoubleLinkedList());
-
+frequencyMap.getOrDefault(1,new DoubleLinkedList());
         curList.addnode(newnode);
         frequencyMap.put(1,curList);
         cache.put(key, newnode);
